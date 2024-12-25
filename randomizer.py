@@ -17,6 +17,11 @@ def getRandomNumber():
     except ValueError:
         label.config(text="Введите int")
         return
+
+    if leftBorder > rightBorder:
+        label.config(text="Введите правильный диапазон")
+        return
+
     label.config(text=random.randint(leftBorder, rightBorder))
 
 root = tk.Tk()
