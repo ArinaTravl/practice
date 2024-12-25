@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, Entry
-import random
+from tkinter import messagebox
 from tkinter import Button
+import random
 
 def getRandomNumber():
     leftBorder = entryFrom.get()
@@ -22,7 +23,32 @@ def getRandomNumber():
         label.config(text="Введите правильный диапазон")
         return
 
-    label.config(text=random.randint(leftBorder, rightBorder))
+    exceptions = listboxExceptions.get(0, tk.END)
+
+    while True:
+        randomNumber = random.randint(leftBorder, rightBorder)
+        if randomNumber not in exceptions:
+            break
+    label.config(text=randomNumber)
+
+
+
+
+def addException():
+    try:
+        exception = int(entryException.get())
+    except ValueError:
+        label.config(text="Введите int")
+        return
+
+    if exception and exception not in listboxExceptions.get(0, tk.END):
+        listboxExceptions.insert(tk.END, exception)
+    else:
+        messagebox.showwarning("Ошибка", "Некорректное или повторяющееся исключение")
+    print(listboxExceptions.get(0, tk.END))
+
+
+
 
 root = tk.Tk()
 root.geometry('500x500')
@@ -44,6 +70,16 @@ label = tk.Label(text = 0)
 label.place(x=250, y=10, anchor="center")
 button = Button(text = "Generate", command = getRandomNumber)
 button.place(x=250, y=30, anchor="center")
+
+
+entryException = tk.Entry(root)
+entryException.place(x=250, y=75, anchor="center")
+
+buttonAdd = tk.Button(root, text="Добавить исключение", command=addException)
+buttonAdd.place(x=250, y=100, anchor="center")
+
+listboxExceptions = tk.Listbox(root)
+listboxExceptions.place(x=50, y=150, width=400, height=150)
 
 
 root.mainloop()
